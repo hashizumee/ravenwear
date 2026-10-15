@@ -14,7 +14,7 @@ Validasi JavaScript: `node --check app.js`.
 
 ## Konten yang perlu dilengkapi
 
-- Foto editorial dari Unsplash adalah ilustrasi, bukan foto produk resmi. Ilustrasi kategori produk dan konsep outlet dibuat dengan CSS.
+- Foto editorial dari Unsplash adalah ilustrasi, bukan foto produk resmi. Foto kategori produk menggunakan foto stok asli Unsplash yang disimpan di assets/; sumber tercatat di assets/README.md. Konsep outlet dibuat dengan CSS.
 - Isi spesifikasi bahan, ukuran, warna, harga per varian, dan foto produk setelah datanya tersedia.
 - Lengkapi email, WhatsApp, Instagram, TikTok, alamat, serta jam operasional dengan data terverifikasi.
 - Form kemitraan memvalidasi input dan menghasilkan draf yang dapat disalin. Tidak mengirim data atau menyimpan informasi ke server. Hubungkan kanal resmi sebelum menyediakan pengiriman.

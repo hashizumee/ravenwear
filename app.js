@@ -25,6 +25,9 @@ document.querySelectorAll('[data-filter]').forEach(button => button.addEventList
   });
   document.querySelectorAll('[data-category]').forEach(product => {
     product.hidden = button.dataset.filter !== 'all' && product.dataset.category !== button.dataset.filter;
+    if (!product.hidden && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      product.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 380, easing: 'ease-out' });
+    }
   });
 }));
 const dialog = document.querySelector('#product-dialog');
@@ -36,6 +39,9 @@ document.querySelectorAll('[data-product]').forEach(button => button.addEventLis
   const [title, description] = products[button.dataset.product];
   document.querySelector('#dialog-title').textContent = title;
   document.querySelector('#dialog-description').textContent = description;
+  const photo = document.querySelector(`[data-category="${button.dataset.product}"] img`);
+  document.querySelector('#dialog-image').src = photo.src;
+  document.querySelector('#dialog-image').alt = photo.alt;
   dialog.showModal();
 }));
 document.querySelectorAll('.close, .close-product').forEach(button => button.addEventListener('click', () => dialog.close()));
@@ -58,3 +64,27 @@ document.querySelector('#copy').addEventListener('click', async () => {
   }
 });
 document.querySelector('#year').textContent = new Date().getFullYear();
+
+// Content stays visible if animation support is unavailable or motion is reduced.
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+if (!motionPreference.matches && 'IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.section-heading, .about > div, .values > div, .product-grid article, .vision > h2, .vision-grid > div, .business > h2, .target, .stats > div, .outlets > div, .partnership > div, .partnership form, .contact > h2, .contact-grid > div').forEach((element, index) => {
+    element.classList.add('reveal');
+    element.style.setProperty('--reveal-delay', `${index % 3 * 80}ms`);
+    revealObserver.observe(element);
+  });
+  motionPreference.addEventListener('change', event => {
+    if (event.matches) {
+      revealObserver.disconnect();
+      document.querySelectorAll('.reveal').forEach(element => element.classList.add('is-visible'));
+    }
+  });
+}

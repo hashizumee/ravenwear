@@ -27,6 +27,7 @@ jobs:
         run: |
           mkdir dist
           cp index.html styles.css app.js dist/
+          cp -r assets dist/
           touch dist/.nojekyll
       - uses: actions/configure-pages@v5
         with:
